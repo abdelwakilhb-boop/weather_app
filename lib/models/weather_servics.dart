@@ -1,9 +1,6 @@
 import 'dart:convert';
-import 'dart:ffi';
-
 import 'package:http/http.dart';
 import 'package:weather_app/models/weather_model.dart';
-
 class WeatherServics {
   Future<WeatherModel> getWeatherServics({
     required double latitude,

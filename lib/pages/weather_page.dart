@@ -16,7 +16,7 @@ class WeatherPage extends StatefulWidget {
 class _WeatherPageState extends State<WeatherPage> {
   WeatherServics weatherServics = WeatherServics();
   GetUserPosition _getUserPosition = GetUserPosition();
-  
+
   void getWeather() async {
     List<double> position = await _getUserPosition.determinePositionLatitude();
     context.read<WeatherBloc>().add(
@@ -34,30 +34,9 @@ class _WeatherPageState extends State<WeatherPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: WeatherBackground(
-        child: BlocBuilder<WeatherBloc, WeatherState>(
-          builder: (context, state) {
-            if (state is WeatherLoading) {
-              return Center(child: CircularProgressIndicator());
-            } else if (state is WeatherLoaded) {
-              return WeatherPageBody(
-                onPressed: () {
-                  getWeather();
-                },
-                windSpeed:
-                    "${state.weatherModel.current!.windSpeed10m!} ${state.weatherModel.currentUnits!.windSpeed10m!}",
-                humidity:
-                    '${state.weatherModel.hourly!.relativeHumidity2m![0]} ${state.weatherModel.hourlyUnits!.relativeHumidity2m!}',
-                sunRise: state.weatherModel.daily!.sunrise![0].split("T")[1],
-                sunSet: state.weatherModel.daily!.sunset![0].split("T")[1],
-                code: state.weatherModel.current!.weatherCode!,
-                temperature2m:
-                    " ${state.weatherModel.current!.temperature2m?.toInt()} ${state.weatherModel.currentUnits!.temperature2m}",
-              );
-            } else if (state is WeatherError) {
-              return Text(state.errorMessage);
-            } else {
-              return Center(child: CircularProgressIndicator());
-            }
+        child: WeatherPageBody(
+          onPressed: () {
+            getWeather();
           },
         ),
       ),
