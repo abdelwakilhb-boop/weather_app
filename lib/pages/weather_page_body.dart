@@ -6,18 +6,13 @@ import 'package:weather_app/constant/weather_helper.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class WeatherPageBody extends StatelessWidget {
-  const WeatherPageBody({
-    super.key,
-  
-    
-    
-    this.onPressed,
-  });
-  
+  const WeatherPageBody({super.key, this.onPressed});
+
   final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
+    int nn = DateTime.wednesday;
     WeatherHelper weatherHelper = WeatherHelper();
     int hourTime = DateTime.now().hour;
     Widget getMessage() {
@@ -33,6 +28,16 @@ class WeatherPageBody extends StatelessWidget {
       }
     }
 
+    List<String> days = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: BlocBuilder<WeatherBloc, WeatherState>(
@@ -40,7 +45,9 @@ class WeatherPageBody extends StatelessWidget {
           if (state is WeatherLoading) {
             return Center(child: CircularProgressIndicator());
           } else if (state is WeatherLoaded) {
-            List weatherList = weatherHelper.getImage(state.weatherModel.current!.weatherCode!);
+            List weatherList = weatherHelper.getImage(
+              state.weatherModel.current!.weatherCode!,
+            );
             return ListView(
               children: [
                 Column(
@@ -52,7 +59,7 @@ class WeatherPageBody extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "City 📌",
+                              "${days[nn - 1]} 📌",
                               style: GoogleFonts.boldonse(
                                 fontSize: 20,
                                 color: Colors.grey,
@@ -73,6 +80,16 @@ class WeatherPageBody extends StatelessWidget {
                       "${state.weatherModel.current!.temperature2m!.toInt()} ${state.weatherModel.currentUnits!.temperature2m}",
                       style: GoogleFonts.boldonse(fontSize: 50),
                     ),
+                    TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        "See other days",
+                        style: GoogleFonts.boldonse(
+                          fontSize: 20,
+                          color: const Color(0xFF6C35FF),
+                        ),
+                      ),
+                    ),
                     const SizedBox(height: 10),
                     Text(
                       weatherList[0],
@@ -82,17 +99,23 @@ class WeatherPageBody extends StatelessWidget {
                     WeatherCard(
                       dontShowImage: false,
                       sunRise1: "SunRise",
-                      sunRise2: state.weatherModel.daily!.sunrise![0].split('T')[1],
+                      sunRise2: state.weatherModel.daily!.sunrise![0].split(
+                        'T',
+                      )[1],
                       sunSet1: "Sunset",
-                      sunSet2: state.weatherModel.daily!.sunset![0].split("T")[1],
+                      sunSet2: state.weatherModel.daily!.sunset![0].split(
+                        "T",
+                      )[1],
                     ),
                     Divider(color: Colors.grey[800]),
                     WeatherCard(
                       dontShowImage: true,
                       sunRise1: "wind speed",
-                      sunRise2:"${state.weatherModel.current!.windSpeed10m} ${state.weatherModel.currentUnits!.windSpeed10m}",
+                      sunRise2:
+                          "${state.weatherModel.current!.windSpeed10m} ${state.weatherModel.currentUnits!.windSpeed10m}",
                       sunSet1: "Humidity",
-                      sunSet2: "${state.weatherModel.hourly!.relativeHumidity2m![0]} ${state.weatherModel.hourlyUnits!.relativeHumidity2m}",
+                      sunSet2:
+                          "${state.weatherModel.hourly!.relativeHumidity2m![0]} ${state.weatherModel.hourlyUnits!.relativeHumidity2m}",
                     ),
                   ],
                 ),
@@ -101,7 +124,7 @@ class WeatherPageBody extends StatelessWidget {
           } else if (state is WeatherError) {
             return Text("Error message ${state.errorMessage}");
           } else {
-            return Center(child: CircularProgressIndicator(color: Colors.blue,));
+            return Center(child: CircularProgressIndicator(color: Colors.blue));
           }
         }),
       ),
