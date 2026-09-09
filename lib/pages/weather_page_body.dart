@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:weather_app/bloc/weather_bloc.dart';
+import 'package:weather_app/constant/get_days.dart';
 import 'package:weather_app/constant/weather_card.dart';
 import 'package:weather_app/constant/weather_helper.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:weather_app/thems/app_colors.dart';
 
 class WeatherPageBody extends StatelessWidget {
   const WeatherPageBody({super.key, this.onPressed});
@@ -12,12 +14,15 @@ class WeatherPageBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int nn = DateTime.wednesday;
+    //Get the image and the weather status>>
     WeatherHelper weatherHelper = WeatherHelper();
+    //End 
+
+    //The bottun message >>>>
     int hourTime = DateTime.now().hour;
     Widget getMessage() {
       if (hourTime >= 6 && hourTime <= 12) {
-        return Text('Good Morning', style: GoogleFonts.boldonse(fontSize: 20));
+        return Text('Good Morning',);
       } else if (hourTime >= 12 && hourTime <= 20) {
         return Text(
           'Good Afternoon ',
@@ -27,24 +32,23 @@ class WeatherPageBody extends StatelessWidget {
         return Text('Good night', style: GoogleFonts.boldonse(fontSize: 20));
       }
     }
+    //End
 
-    List<String> days = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-    ];
-
+    //Get the day
+    GetDays getToday = GetDays();
+    int nn = DateTime.wednesday;
+    //End
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: BlocBuilder<WeatherBloc, WeatherState>(
         builder: ((context, state) {
+          //Loading >>>
           if (state is WeatherLoading) {
             return Center(child: CircularProgressIndicator());
-          } else if (state is WeatherLoaded) {
+          }
+          //End of Loading
+          //The weather is loaded >>>
+           else if (state is WeatherLoaded) {
             List weatherList = weatherHelper.getImage(
               state.weatherModel.current!.weatherCode!,
             );
@@ -59,10 +63,10 @@ class WeatherPageBody extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "${days[nn - 1]} 📌",
+                              getToday.getDays(nn),
                               style: GoogleFonts.boldonse(
                                 fontSize: 20,
-                                color: Colors.grey,
+                                color: AppColors.primaryGray,
                               ),
                             ),
                             getMessage(),
@@ -81,12 +85,14 @@ class WeatherPageBody extends StatelessWidget {
                       style: GoogleFonts.boldonse(fontSize: 50),
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, "weatherdays");
+                      },
                       child: Text(
                         "See other days",
                         style: GoogleFonts.boldonse(
                           fontSize: 20,
-                          color: const Color(0xFF6C35FF),
+                          color: AppColors.primaryOrange,
                         ),
                       ),
                     ),

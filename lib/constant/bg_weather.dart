@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:weather_app/thems/app_colors.dart';
 
 class WeatherBackground extends StatelessWidget {
   final Widget child;
@@ -31,7 +32,7 @@ class WeatherBackground extends StatelessWidget {
             top: -100,
             right: -80,
             child: _glow(
-              color: const Color(0xFF6C35FF),
+              color: AppColors.primaryBlue,
               size: 580,
             ),
           ),
@@ -41,7 +42,7 @@ class WeatherBackground extends StatelessWidget {
             top: 80,
             left: 0,
             child: _glow(
-              color: const Color(0xFFFF9D2E),
+              color: AppColors.primaryOrange,
               size: 500,
             ),
           ),
